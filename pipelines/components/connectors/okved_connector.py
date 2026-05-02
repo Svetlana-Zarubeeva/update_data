@@ -8,13 +8,13 @@ from pipelines.components.connectors.connector import Connector
 from settings import OKVED_DOWNLOAD_URL, storage_path
 
 
-class RosstatOkvedConnector(Connector, ABC):
+class OkvedConnector(Connector, ABC):
     """
-    Загружает архив ОКВЭД/ОКПД2 с официального сайта Росстата.
+    Скачивает ZIP-архив с JSON-файлом ОКВЭД.
     """
     def __init__(self):
         self.url = OKVED_DOWNLOAD_URL
-        self.local_path = os.path.join(storage_path, "okved_archive.rar")
+        self.local_path = os.path.join(storage_path, "okved_2.json.zip")
 
     def connect(self) -> None:
         pass
@@ -23,10 +23,10 @@ class RosstatOkvedConnector(Connector, ABC):
         pass
 
     def download_okved_archive(self) -> str:
-        """Скачайте архив RAR и верните локальный путь."""
+        """Скачивает ZIP-архив и возвращает путь к нему."""
         logging.info(f"📥 Скачивание архива ОКВЭД с {self.url}")
         
-        response = requests.get(self.url, stream=True, verify=False)
+        response = requests.get(self.url, stream=True)
         response.raise_for_status()
         
         total_size = int(response.headers.get('content-length', 0))
