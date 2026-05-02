@@ -1,5 +1,5 @@
 from pipelines.pipeline import Pipeline
-from pipelines.components.connectors.rosstat_okved_connector import RosstatOkvedConnector
+from pipelines.components.connectors.okved_connector import OkvedConnector
 from pipelines.components.extractors.okved_gold_extractor import OkvedGoldExtractor
 from pipelines.components.transformers.okved_gold_transformer import OkvedGoldTransformer
 from pipelines.components.loaders.okved_gold_loader import OkvedGoldLoader
@@ -9,7 +9,7 @@ from pipelines.components.connectors.postgres_connector import PostgresConnector
 def main() -> Pipeline:
     """Автоматизированное обновление справочника IT-кодов ОКВЭД/ОКПД2 (разделы 62 и 63) из официальных источников."""
     
-    connector = RosstatOkvedConnector()
+    connector = OkvedConnector()
     pg_connector = PostgresConnector()
 
     extractor = OkvedGoldExtractor(connector)
