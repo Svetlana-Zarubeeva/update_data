@@ -72,3 +72,7 @@ OKVED_IT_CODES_TABLE = "okved_it_codes"
 
 OFDATA_BRONZE_DATABASE = "ofdata_bronze"
 OFDATA_BRONZE_COLLECTION = "raw_data"
+
+SILVER_SCHEMA = "silver"
+
+SILVER_OFDATA_TABLE = "silver_ofdata_companies"
