@@ -40,7 +40,7 @@ class SilverLoader(Loader):
                 upsert_on=["inn"],
                 upsert_update_columns="*"
             )
-            self._loaded_count += len(batch)Загрузка преобразованных данных в PostgreSQL
+            self._loaded_count += len(batch)
             logging.info(f"✅ Inserted batch of {len(batch)} records")
 
         except Exception as e:

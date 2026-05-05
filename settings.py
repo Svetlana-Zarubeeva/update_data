@@ -68,7 +68,20 @@ MONGO_READ_BATCH_SIZE = 10_000
 MONGO_WRITE_BATCH_SIZE = 1_000
 MONGO_CURSOR_BATCH_SIZE = 1_000
 
+founder_type_records = [
+    {"type_code": "ФЛ", "type_name": "Физическое лицо"},
+    {"type_code": "РосОрг", "type_name": "Российская организация"},
+    {"type_code": "ИнОрг", "type_name": "Иностранная организация"},
+    {"type_code": "ПИФ", "type_name": "Паевой инвестиционный фонд"},
+    {"type_code": "РФ", "type_name": "Субъект РФ"}
+]
+
 OKVED_IT_CODES_TABLE = "okved_it_codes"
+GOLD_LEGAL_ENTITIES_TABLE = "ofdata_legal_entities"
+GOLD_ADDRESSES_TABLE = "ofdata_addresses"
+GOLD_DIRECTORS_TABLE = "ofdata_directors"
+GOLD_FOUNDERS_TABLE = "ofdata_founders"
+GOLD_FOUNDER_TYPES_TABLE = "ofdata_founder_types"
 
 OFDATA_BRONZE_DATABASE = "ofdata_bronze"
 OFDATA_BRONZE_COLLECTION = "raw_data"
