@@ -52,6 +52,11 @@ OKVED_DOWNLOAD_URL = "https://ofdata.ru/open-data/download/okved_2.json.zip"
 
 OFDATA_API_URL = "https://api.ofdata.ru"
 OFDATA_API_KEY = os.getenv("OFDATA_API_KEY")
+
+DADATA_API_URL = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party"
+DADATA_API_KEY = os.getenv("DADATA_API_KEY")
+DADATA_SECRET_KEY = os.getenv("DADATA_SECRET_KEY")
+
 OFDATA_REGION = 61
 OFDATA_API_TIMEOUT = 30
 OFDATA_API_MAX_RETRIES = 3
@@ -85,6 +90,8 @@ GOLD_FOUNDER_TYPES_TABLE = "ofdata_founder_types"
 
 OFDATA_BRONZE_DATABASE = "ofdata_bronze"
 OFDATA_BRONZE_COLLECTION = "raw_data"
+DADATA_BRONZE_DATABASE = "dadata_bronze"
+DADATA_BRONZE_COLLECTION = "raw_data"
 
 SILVER_SCHEMA = "silver"
 

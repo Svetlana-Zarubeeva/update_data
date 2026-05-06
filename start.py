@@ -10,6 +10,7 @@ from pipelines.pipelines.okved.okved_gold_pipeline import main as okved_gold_pip
 from pipelines.pipelines.ofdata.ofdata_bronze_pipeline import main as ofdata_bronze_pipeline
 from pipelines.pipelines.ofdata.ofdata_silver_pipeline import main as ofdata_silver_pipeline
 from pipelines.pipelines.ofdata.ofdata_gold_pipeline import main as ofdata_gold_pipeline
+from pipelines.pipelines.dadata.dadata_bronze_pipeline import main as dadata_bronze_pipeline
 
 
 ## Название ключей только в snake_case
@@ -18,6 +19,7 @@ modules = {
     'ofdata_bronze_pipeline': ofdata_bronze_pipeline,
     'ofdata_silver_pipeline': ofdata_silver_pipeline,
     'ofdata_gold_pipeline': ofdata_gold_pipeline,
+    'dadata_bronze_pipeline': dadata_bronze_pipeline,
 }
 
 
