@@ -96,3 +96,4 @@ DADATA_BRONZE_COLLECTION = "raw_data"
 SILVER_SCHEMA = "silver"
 
 SILVER_OFDATA_TABLE = "silver_ofdata_companies"
+SILVER_DADATA_TABLE = "silver_dadata_companies"
