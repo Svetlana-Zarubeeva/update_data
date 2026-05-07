@@ -228,3 +228,62 @@ class PipelineMetric(Base, IdMixin):
         nullable=False,
         server_default=text('CURRENT_TIMESTAMP')
     )
+
+
+class SilverDadataCompany(Base, TimestampMixin):
+    """
+    Нормализованная таблица компаний из DaData Bronze (MongoDB → PostgreSQL).
+    Содержит расширенную информацию о компаниях, полученную из DaData API.
+    Первичный ключ — ИНН компании.
+    """
+    __tablename__ = 'silver_dadata_companies'
+    __table_args__ = (
+        Index('silver_dadata_companies_inn_idx', 'inn'),
+        Index('silver_dadata_companies_ogrn_idx', 'ogrn'),
+        Index('silver_dadata_companies_status_idx', 'status'),
+        Index('silver_dadata_companies_region_idx', 'region'),
+        Index('silver_dadata_companies_city_idx', 'city'),
+        Index('silver_dadata_companies_okved_main_idx', 'okved_main'),
+        {'schema': 'silver'},
+    )
+
+    inn: Mapped[str] = mapped_column(String(12), primary_key=True, nullable=False)
+    ogrn: Mapped[Optional[str]] = mapped_column(String(15))
+    company_name: Mapped[Optional[str]] = mapped_column(String(500))
+    short_name: Mapped[Optional[str]] = mapped_column(String(255))
+    kpp: Mapped[Optional[str]] = mapped_column(String(9))
+    status: Mapped[Optional[str]] = mapped_column(String(50))
+    registration_date: Mapped[Optional[datetime.datetime]] = mapped_column(TIMESTAMP(precision=0))
+    actuality_date: Mapped[Optional[datetime.datetime]] = mapped_column(TIMESTAMP(precision=0))
+    
+    # Адрес
+    address_full: Mapped[Optional[str]] = mapped_column(Text)
+    postal_code: Mapped[Optional[str]] = mapped_column(String(10))
+    region: Mapped[Optional[str]] = mapped_column(String(100))
+    city: Mapped[Optional[str]] = mapped_column(String(100))
+    street: Mapped[Optional[str]] = mapped_column(String(255))
+    house: Mapped[Optional[str]] = mapped_column(String(50))
+    flat: Mapped[Optional[str]] = mapped_column(String(50))
+    latitude: Mapped[Optional[float]] = mapped_column(Float(precision=8))
+    longitude: Mapped[Optional[float]] = mapped_column(Float(precision=8))
+    
+    # Контактная информация
+    phones: Mapped[Optional[dict]] = mapped_column(JSONB)
+    emails: Mapped[Optional[dict]] = mapped_column(JSONB)
+    websites: Mapped[Optional[dict]] = mapped_column(JSONB)
+    
+    # Финансы
+    employee_count: Mapped[Optional[int]] = mapped_column(Integer)
+    revenue: Mapped[Optional[float]] = mapped_column(Float)
+    income: Mapped[Optional[float]] = mapped_column(Float)
+    expense: Mapped[Optional[float]] = mapped_column(Float)
+    tax_system: Mapped[Optional[str]] = mapped_column(String(10))
+    
+    # Руководство
+    management_name: Mapped[Optional[str]] = mapped_column(String(255))
+    management_post: Mapped[Optional[str]] = mapped_column(String(255))
+    management_start_date: Mapped[Optional[datetime.datetime]] = mapped_column(TIMESTAMP(precision=0))
+    
+    # ОКВЭД
+    okved_main: Mapped[Optional[str]] = mapped_column(String(20))
+    okveds: Mapped[Optional[dict]] = mapped_column(JSONB)

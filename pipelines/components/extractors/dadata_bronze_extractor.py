@@ -10,7 +10,7 @@ from settings import GOLD_LEGAL_ENTITIES_TABLE, DADATA_BRONZE_DATABASE, DADATA_B
 
 
 class DadataBronzeExtractor(Extractor):
-    """Извлекает данные об организациях из Gold-слоя и дополняет их информацией из DaData API."""\
+    """Извлекает данные об организациях из Gold-слоя и дополняет их информацией из DaData API."""
 
     def __init__(
         self,
@@ -34,6 +34,8 @@ class DadataBronzeExtractor(Extractor):
         Возвращает документы для загрузки в Bronze (включая обновления).
         """
         self._dadata.connect()
+
+        self._mongo.connect()
 
         with self._pg.with_defaults(schema="public", table=GOLD_LEGAL_ENTITIES_TABLE):
             cursor = self._pg.execute(f"SELECT inn, ogrn FROM {GOLD_LEGAL_ENTITIES_TABLE}")
