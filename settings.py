@@ -82,11 +82,13 @@ founder_type_records = [
 ]
 
 OKVED_IT_CODES_TABLE = "okved_it_codes"
-GOLD_LEGAL_ENTITIES_TABLE = "ofdata_legal_entities"
-GOLD_ADDRESSES_TABLE = "ofdata_addresses"
-GOLD_DIRECTORS_TABLE = "ofdata_directors"
-GOLD_FOUNDERS_TABLE = "ofdata_founders"
-GOLD_FOUNDER_TYPES_TABLE = "ofdata_founder_types"
+LEGAL_ENTITIES_TABLE = "legal_entities"
+ADDRESSES_TABLE = "addresses"
+CONTACT_INFO_TABLE = "contact_info"
+FINANCE_TABLE = "finance"
+MANAGEMENT_TABLE = "management"
+FOUNDERS_TABLE = "founders"
+GOLD_FOUNDER_TYPES_TABLE = "founder_types"
 
 OFDATA_BRONZE_DATABASE = "ofdata_bronze"
 OFDATA_BRONZE_COLLECTION = "raw_data"

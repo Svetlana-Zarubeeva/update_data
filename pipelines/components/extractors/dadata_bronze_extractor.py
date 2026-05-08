@@ -6,7 +6,7 @@ from pipelines.components.extractors.extractor import Extractor
 from pipelines.components.connectors.postgres_connector import PostgresConnector
 from pipelines.components.connectors.mongo_connector import MongoConnector
 from pipelines.components.connectors.dadata_connector import DadataConnector
-from settings import GOLD_LEGAL_ENTITIES_TABLE, DADATA_BRONZE_DATABASE, DADATA_BRONZE_COLLECTION
+from settings import LEGAL_ENTITIES_TABLE, DADATA_BRONZE_DATABASE, DADATA_BRONZE_COLLECTION
 
 
 class DadataBronzeExtractor(Extractor):
