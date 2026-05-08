@@ -112,124 +112,6 @@ class SilverPipelineMetric(Base, IdMixin):
     )
 
 
-class OfdataFounderType(Base, IdMixin):
-    __tablename__ = 'ofdata_founder_types'
-    __table_args__ = (
-        Index('idx_founder_types_code', 'type_code'),
-    )
-
-    type_code: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
-    type_name: Mapped[str] = mapped_column(String(100), nullable=False)
-
-
-class OfdataAddress(Base, IdMixin, TimestampMixin):
-    __tablename__ = 'ofdata_addresses'
-    __table_args__ = (
-        Index('idx_addresses_region', 'region'),
-        Index('idx_directors_legal_entity_id', 'legal_entity_id'),
-        Index('idx_addresses_city', 'city'),
-    )
-
-    legal_entity_id: Mapped[int] = mapped_column(
-        BigInteger,
-        ForeignKey('ofdata_legal_entities.id', ondelete='CASCADE'),
-        nullable=False
-    )
-    index: Mapped[Optional[str]] = mapped_column(String(20))
-    region: Mapped[str] = mapped_column(String(255), nullable=False)
-    city: Mapped[str] = mapped_column(String(255), nullable=False)
-    street: Mapped[str] = mapped_column(String(255), nullable=False)
-    house: Mapped[str] = mapped_column(String(255), nullable=False)
-    full_address: Mapped[str] = mapped_column(Text, nullable=False)
-
-
-class OfdataLegalEntity(Base, TimestampMixin, IdMixin):
-    __tablename__ = 'ofdata_legal_entities'
-    __table_args__ = (
-        Index('idx_legal_entities_inn', 'inn'),
-        Index('idx_legal_entities_ogrn', 'ogrn'),
-        Index('idx_legal_entities_region_code', 'region_code'),
-        Index('idx_legal_entities_okved_code', 'okved_code'),
-        Index('idx_legal_entities_status', 'status'),
-    )
-
-    inn: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
-    ogrn: Mapped[Optional[str]] = mapped_column(String(20))
-    kpp: Mapped[Optional[str]] = mapped_column(String(10))
-    short_name: Mapped[str] = mapped_column(String(255), nullable=False)
-    full_name: Mapped[str] = mapped_column(Text, nullable=False)
-    reg_date: Mapped[Optional[datetime.date]] = mapped_column(Date)
-    status: Mapped[str] = mapped_column(String(255), nullable=False)
-    region_code: Mapped[str] = mapped_column(String(10), nullable=False)
-    okved_code: Mapped[str] = mapped_column(String(20), nullable=False)
-    okved_description: Mapped[str] = mapped_column(Text, nullable=False)
-
-
-class OfdataDirector(Base, IdMixin):
-    __tablename__ = 'ofdata_directors'
-    __table_args__ = (
-        Index('idx_directors_inn', 'inn'),
-        Index('idx_directors_legal_entity_id', 'legal_entity_id'),
-        Index('idx_directors_position', 'position'),
-    )
-
-    legal_entity_id: Mapped[int] = mapped_column(
-        BigInteger,
-        ForeignKey('ofdata_legal_entities.id', ondelete='CASCADE'),
-        nullable=False
-    )
-    inn: Mapped[Optional[str]] = mapped_column(String(20))
-    full_name: Mapped[str] = mapped_column(String(255), nullable=False)
-    position: Mapped[str] = mapped_column(String(100), nullable=False)
-    is_disqualified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    is_inaccurate: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    reason: Mapped[Optional[str]] = mapped_column(Text)
-
-
-class OfdataFounder(Base, IdMixin):
-    __tablename__ = 'ofdata_founders'
-    __table_args__ = (
-        Index('idx_founders_inn', 'inn'),
-        Index('idx_founders_legal_entity_id', 'legal_entity_id'),
-        Index('idx_founders_type_id', 'founder_type_id'),
-    )
-
-    legal_entity_id: Mapped[int] = mapped_column(
-        BigInteger,
-        ForeignKey('ofdata_legal_entities.id', ondelete='CASCADE'),
-        nullable=False
-    )
-    founder_type_id: Mapped[int] = mapped_column(
-        BigInteger,
-        ForeignKey('ofdata_founder_types.id', ondelete='RESTRICT'),
-        nullable=False
-    )
-    inn: Mapped[Optional[str]] = mapped_column(String(20))
-    full_name: Mapped[str] = mapped_column(String(255), nullable=False)
-    ogrn: Mapped[Optional[str]] = mapped_column(String(20))
-    kpp: Mapped[Optional[str]] = mapped_column(String(10))
-    is_inaccurate: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    reason: Mapped[Optional[str]] = mapped_column(Text)
-
-
-class PipelineMetric(Base, IdMixin):
-    __tablename__ = 'pipeline_metrics'
-    __table_args__ = (
-        Index('idx_pipeline_metrics_name', 'pipeline_name'),
-        Index('idx_pipeline_metrics_created_at', 'created_at'),
-    )
-
-    pipeline_name: Mapped[str] = mapped_column(String(50), nullable=False)
-    total_records: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    new_records: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    updated_records: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    created_at: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP(precision=0),
-        nullable=False,
-        server_default=text('CURRENT_TIMESTAMP')
-    )
-
-
 class SilverDadataCompany(Base, TimestampMixin):
     """
     Нормализованная таблица компаний из DaData Bronze (MongoDB → PostgreSQL).
@@ -287,3 +169,185 @@ class SilverDadataCompany(Base, TimestampMixin):
     # ОКВЭД
     okved_main: Mapped[Optional[str]] = mapped_column(String(20))
     okveds: Mapped[Optional[dict]] = mapped_column(JSONB)
+
+
+class LegalEntity(Base, TimestampMixin, IdMixin):
+    """
+    Основная информация о юридическом лице в Gold-слое.
+    """
+    __tablename__ = 'legal_entities'
+    __table_args__ = (
+        Index('idx_entities_inn', 'inn'),
+        Index('idx_entities_ogrn', 'ogrn'),
+        Index('idx_entities_status', 'status'),
+        Index('idx_entities_okved_id', 'okved_id'),
+    )
+
+    inn: Mapped[str] = mapped_column(String(12), unique=True, nullable=False)
+    ogrn: Mapped[Optional[str]] = mapped_column(String(15))
+    kpp: Mapped[Optional[str]] = mapped_column(String(9))
+    short_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    full_name: Mapped[str] = mapped_column(String(500), nullable=False)
+    registration_date: Mapped[Optional[datetime.date]] = mapped_column(Date)
+    status: Mapped[str] = mapped_column(String(50), nullable=False)
+    okved_id: Mapped[Optional[str]] = mapped_column(
+        String(20),
+        ForeignKey('okved_it_codes.okved_code', ondelete='SET NULL')
+    )
+
+
+class Address(Base, IdMixin, TimestampMixin):
+    """
+    Адрес юридического лица.
+    """
+    __tablename__ = 'addresses'
+    __table_args__ = (
+        Index('idx_addresses_entity_id', 'legal_entity_id'),
+        Index('idx_addresses_postal_code', 'postal_code'),
+    )
+
+    legal_entity_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey('legal_entities.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    address_full: Mapped[str] = mapped_column(Text, nullable=False)
+    postal_code: Mapped[Optional[str]] = mapped_column(String(10))
+    region: Mapped[str] = mapped_column(String(100), nullable=False)
+    city: Mapped[str] = mapped_column(String(100), nullable=False)
+    street: Mapped[Optional[str]] = mapped_column(String(255))
+    house: Mapped[Optional[str]] = mapped_column(String(50))
+    flat: Mapped[Optional[str]] = mapped_column(String(50))
+    latitude: Mapped[Optional[float]] = mapped_column(Float(precision=8))
+    longitude: Mapped[Optional[float]] = mapped_column(Float(precision=8))
+
+
+class ContactInfo(Base, IdMixin, TimestampMixin):
+    """
+    Контактная информация юридического лица.
+    """
+    __tablename__ = 'contact_info'
+    __table_args__ = (
+        Index('idx_contacts_entity_id', 'legal_entity_id'),
+    )
+
+    legal_entity_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey('legal_entities.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    phones: Mapped[Optional[dict]] = mapped_column(JSONB)
+    emails: Mapped[Optional[dict]] = mapped_column(JSONB)
+    websites: Mapped[Optional[dict]] = mapped_column(JSONB)
+
+
+class Finance(Base, IdMixin, TimestampMixin):
+    """
+    Финансовая информация о юридическом лице.
+    """
+    __tablename__ = 'finance'
+    __table_args__ = (
+        Index('idx_finance_entity_id', 'legal_entity_id'),
+    )
+
+    legal_entity_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey('legal_entities.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    employee_count: Mapped[Optional[int]] = mapped_column(Integer)
+    revenue: Mapped[Optional[float]] = mapped_column(Float)
+    income: Mapped[Optional[float]] = mapped_column(Float)
+    expense: Mapped[Optional[float]] = mapped_column(Float)
+    tax_system: Mapped[Optional[str]] = mapped_column(String(10))
+
+
+class Management(Base, IdMixin, TimestampMixin):
+    """
+    Руководство юридического лица.
+    """
+    __tablename__ = 'management'
+    __table_args__ = (
+        Index('idx_management_entity_id', 'legal_entity_id'),
+        Index('idx_management_name', 'name'),
+    )
+
+    legal_entity_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey('legal_entities.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    name: Mapped[Optional[str]] = mapped_column(String(255))
+    post: Mapped[Optional[str]] = mapped_column(String(255))
+    start_date: Mapped[Optional[datetime.date]] = mapped_column(Date)
+
+
+class FounderType(Base, IdMixin):
+    """
+    Типы учредителей.
+    """
+    __tablename__ = 'founder_types'
+    __table_args__ = (
+        Index('idx_founder_types_code', 'type_code'),
+    )
+
+    type_code: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
+    type_name: Mapped[str] = mapped_column(String(100), nullable=False)
+
+
+class Founder(Base, IdMixin, TimestampMixin):
+    """
+    Учредители юридического лица.
+    """
+    __tablename__ = 'founders'
+    __table_args__ = (
+        Index('idx_founders_entity_id', 'legal_entity_id'),
+        Index('idx_founders_type_id', 'founder_type_id'),
+    )
+
+    legal_entity_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey('legal_entities.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    founder_type_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey('founder_types.id', ondelete='RESTRICT'),
+        nullable=False
+    )
+    inn: Mapped[Optional[str]] = mapped_column(String(12))
+    full_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    is_inaccurate: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    reason: Mapped[Optional[str]] = mapped_column(Text)
+
+
+class PipelineMetric(Base, IdMixin):
+    """
+    Метрики выполнения Gold ETL-пайплайна с детализацией по таблицам.
+    """
+    __tablename__ = 'pipeline_metrics'
+    __table_args__ = (
+        Index('idx_pipeline_metrics_name', 'pipeline_name'),
+        Index('idx_pipeline_metrics_created_at', 'created_at'),
+    )
+
+    pipeline_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    
+    # Основные агрегаты
+    total_records: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    new_records: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    updated_records: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+
+    # Детализация по таблицам
+    legal_entities_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    addresses_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    contact_info_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    finance_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    management_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    founders_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        TIMESTAMP(precision=0),
+        nullable=False,
+        server_default=text('CURRENT_TIMESTAMP')
+    )
