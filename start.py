@@ -9,9 +9,18 @@ import sys
 from pipelines.pipelines.okved.okved_gold_pipeline import main as okved_gold_pipeline
 from pipelines.pipelines.ofdata.ofdata_bronze_pipeline import main as ofdata_bronze_pipeline
 from pipelines.pipelines.ofdata.ofdata_silver_pipeline import main as ofdata_silver_pipeline
+from pipelines.pipelines.ofdata.ofdata_gold_pipeline import main as ofdata_gold_pipeline
 from pipelines.pipelines.dadata.dadata_bronze_pipeline import main as dadata_bronze_pipeline
 from pipelines.pipelines.dadata.dadata_silver_pipeline import main as dadata_silver_pipeline
-from pipelines.pipelines.gold.gold_pipeline import main as gold_pipeline
+from pipelines.pipelines.dadata.dadata_gold_pipeline import main as dadata_gold_pipeline
+from pipelines.pipelines.gold.legal_entities_gold_pipeline import main as legal_entities_gold_pipeline
+from pipelines.pipelines.checko.checko_bronze_pipeline import main as checko_bronze_pipeline
+from pipelines.pipelines.checko.checko_silver_pipeline import main as checko_silver_pipeline
+from pipelines.pipelines.gold.addresses_gold_pipeline import main as addresses_gold_pipeline
+from pipelines.pipelines.gold.contact_gold_pipeline import main as contact_gold_pipeline
+from pipelines.pipelines.gold.finance_gold_pipeline import main as finance_gold_pipeline
+from pipelines.pipelines.gold.management_gold_pipeline import main as management_gold_pipeline
+from pipelines.pipelines.gold.founders_gold_pipeline import main as founders_gold_pipeline
 
 
 ## Название ключей только в snake_case
@@ -19,9 +28,18 @@ modules = {
     'okved_gold_pipeline': okved_gold_pipeline,
     'ofdata_bronze_pipeline': ofdata_bronze_pipeline,
     'ofdata_silver_pipeline': ofdata_silver_pipeline,
+    'ofdata_gold_pipeline': ofdata_gold_pipeline,
     'dadata_bronze_pipeline': dadata_bronze_pipeline,
     'dadata_silver_pipeline': dadata_silver_pipeline,
-    'gold_pipeline': gold_pipeline,
+    'dadata_gold_pipeline': dadata_gold_pipeline,
+    'legal_entities_gold_pipeline': legal_entities_gold_pipeline,
+    'checko_bronze_pipeline': checko_bronze_pipeline,
+    'checko_silver_pipeline': checko_silver_pipeline,
+    'addresses_gold_pipeline': addresses_gold_pipeline,
+    'contact_gold_pipeline': contact_gold_pipeline,
+    'finance_gold_pipeline': finance_gold_pipeline,
+    'management_gold_pipeline': management_gold_pipeline,
+    'founders_gold_pipeline': founders_gold_pipeline,
 }
 
 

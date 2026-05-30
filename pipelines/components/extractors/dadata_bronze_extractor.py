@@ -6,7 +6,7 @@ from pipelines.components.extractors.extractor import Extractor
 from pipelines.components.connectors.postgres_connector import PostgresConnector
 from pipelines.components.connectors.mongo_connector import MongoConnector
 from pipelines.components.connectors.dadata_connector import DadataConnector
-from settings import LEGAL_ENTITIES_TABLE, DADATA_BRONZE_DATABASE, DADATA_BRONZE_COLLECTION
+from settings import OFDATA_GOLD_TABLE, DADATA_BRONZE_DATABASE, DADATA_BRONZE_COLLECTION
 
 
 class DadataBronzeExtractor(Extractor):
@@ -37,8 +37,8 @@ class DadataBronzeExtractor(Extractor):
 
         self._mongo.connect()
 
-        with self._pg.with_defaults(schema="public", table=GOLD_LEGAL_ENTITIES_TABLE):
-            cursor = self._pg.execute(f"SELECT inn, ogrn FROM {GOLD_LEGAL_ENTITIES_TABLE}")
+        with self._pg.with_defaults(schema="public", table=OFDATA_GOLD_TABLE):
+            cursor = self._pg.execute(f"SELECT inn, ogrn FROM {OFDATA_GOLD_TABLE}")
             gold_records = [(row[0] or "", row[1] or "") for row in cursor]
 
         collection = self._mongo.db(DADATA_BRONZE_DATABASE)[DADATA_BRONZE_COLLECTION]

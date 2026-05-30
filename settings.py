@@ -63,6 +63,12 @@ OFDATA_API_MAX_RETRIES = 3
 OFDATA_API_RETRY_DELAY = 2
 OFDATA_API_MAX_PAGE_SIZE = 100
 
+CHECKO_API_URL = "https://api.checko.ru/v2"
+CHECKO_API_KEY = os.getenv("CHECKO_API_KEY", "")
+CHECKO_REGION = "61"
+CHECKO_REQUEST_DELAY_MIN = 1
+CHECKO_REQUEST_DELAY_MAX = 2
+
 storage_path = os.path.join(os.path.dirname(__file__), "storage")
 os.makedirs(storage_path, exist_ok=True)
 
@@ -89,13 +95,18 @@ FINANCE_TABLE = "finance"
 MANAGEMENT_TABLE = "management"
 FOUNDERS_TABLE = "founders"
 GOLD_FOUNDER_TYPES_TABLE = "founder_types"
+OFDATA_GOLD_TABLE = "ofdata_gold_entities"
+DADATA_GOLD_TABLE = "dadata_gold_entities"
 
 OFDATA_BRONZE_DATABASE = "ofdata_bronze"
 OFDATA_BRONZE_COLLECTION = "raw_data"
 DADATA_BRONZE_DATABASE = "dadata_bronze"
 DADATA_BRONZE_COLLECTION = "raw_data"
+CHECKO_BRONZE_DATABASE = "checko_bronze"
+CHECKO_BRONZE_COLLECTION = "raw_data"
 
 SILVER_SCHEMA = "silver"
 
 SILVER_OFDATA_TABLE = "silver_ofdata_companies"
 SILVER_DADATA_TABLE = "silver_dadata_companies"
+SILVER_CHECKO_TABLE = "silver_checko_companies"
